@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - Precise Age Calculation Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ad-banner {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .ad-banner::before {
+            content: "AdSense";
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 10px;
+            color: #5f6368;
+            background: #fff;
+            padding: 2px 4px;
+            border-radius: 2px;
+            border: 1px solid #dadce0;
+        }
+
+        .ad-content {
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        .ad-title {
+            font-weight: 600;
+            color: #1a73e8;
+            margin-bottom: 8px;
+            text-decoration: underline;
+        }
+
+        .ad-url {
+            color: #188038;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 30px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .results-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+
+        .results-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .age-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .age-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .age-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .age-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .age-card .unit {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .real-time-age {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .real-time-age h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .live-counter {
+            font-size: 1.8rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .display-options {
+            margin: 20px 0;
+        }
+
+        .display-options h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .option-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 8px 16px;
+            background: #e9ecef;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .option-btn:hover, .option-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .famous-birthdays {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
+        }
+
+        .famous-birthdays h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .birthday-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .birthday-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .birthday-card .name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .birthday-card .date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .birthday-card .profession {
+            color: #667eea;
+            font-size: 0.8rem;
+        }
+
+        .timezone-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1565c0;
+        }
+
+        .ad-horizontal {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin: 30px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+
+        .ad-horizontal::before {
+            content: "AdSense";
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 10px;
+            color: #5f6368;
+            background: #fff;
+            padding: 2px 4px;
+            border-radius: 2px;
+            border: 1px solid #dadce0;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .age-display {
+                grid-template-columns: 1fr;
+            }
+            
+            .birthday-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .option-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎂 Age Calculator</h1>
+            <p>Calculate your exact age with precision - Years, Months, Days, Hours & Minutes</p>
+        </div>
+
+        <!-- Homepage Ad Banner -->
+        <div class="ad-horizontal">
+            <div class="ad-content">
+                <div class="ad-title">Premium Time Management Tools</div>
+                <div>Discover advanced calendar and scheduling solutions for your business</div>
+                <div class="ad-url">www.timetools.com</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="calculator-section">
+                <div class="timezone-info">
+                    <strong>🌍 Timezone:</strong> <span id="timezone-display">Detecting...</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="birthdate">📅 Your Birth Date:</label>
+                    <input type="date" id="birthdate" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="target-date">📅 Calculate Age Until (Optional - defaults to now):</label>
+                    <input type="date" id="target-date">
+                </div>
+
+                <button class="calculate-btn" onclick="calculateAge()">
+                    ✨ Calculate My Age
+                </button>
+
+                <div class="display-options">
+                    <h4>📊 Display Format:</h4>
+                    <div class="option-buttons">
+                        <div class="option-btn active" onclick="setDisplayMode('traditional')" data-mode="traditional">Traditional</div>
+                        <div class="option-btn" onclick="setDisplayMode('total-days')" data-mode="total-days">Total Days</div>
+                        <div class="option-btn" onclick="setDisplayMode('total-hours')" data-mode="total-hours">Total Hours</div>
+                        <div class="option-btn" onclick="setDisplayMode('total-minutes')" data-mode="total-minutes">Total Minutes</div>
+                        <div class="option-btn" onclick="setDisplayMode('all')" data-mode="all">All Formats</div>
+                    </div>
+                </div>
+
+                <div id="results" class="results-section" style="display: none;">
+                    <h3>🎯 Your Age Calculation Results</h3>
+                    <div id="age-display" class="age-display"></div>
+                </div>
+
+                <div id="real-time-section" class="real-time-age" style="display: none;">
+                    <h3>⏰ Your Current Age (Live Counter)</h3>
+                    <div id="live-counter" class="live-counter"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <!-- Sidebar Ad 1 -->
+                <div class="ad-banner">
+                    <div class="ad-content">
+                        <div class="ad-title">Birthday Party Planning</div>
+                        <div>Plan the perfect celebration with our party supplies and decorations</div>
+                        <div class="ad-url">www.partyplanners.com</div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Ad 2 -->
+                <div class="ad-banner">
+                    <div class="ad-content">
+                        <div class="ad-title">Health & Wellness Apps</div>
+                        <div>Track your fitness goals and maintain a healthy lifestyle with our apps</div>
+                        <div class="ad-url">www.healthtracker.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Between Sections Ad -->
+        <div class="ad-horizontal">
+            <div class="ad-content">
+                <div class="ad-title">Financial Planning for Every Age</div>
+                <div>Expert advice on retirement planning, investments, and financial security</div>
+                <div class="ad-url">www.financialadvice.com</div>
+            </div>
+        </div>
+
+        <div class="famous-birthdays">
+            <h2>🌟 Famous People Born Today</h2>
+            <div id="famous-birthdays-list" class="birthday-list"></div>
+        </div>
+
+        <!-- Bottom Ad -->
+        <div class="ad-horizontal">
+            <div class="ad-content">
+                <div class="ad-title">Online Education Courses</div>
+                <div>Learn new skills at any age with our comprehensive online courses</div>
+                <div class="ad-url">www.onlinelearning.com</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDisplayMode = 'traditional';
+        let birthDate = null;
+        let realTimeInterval = null;
+
+        // Famous people database
+        const famousPeople = [
+            { name: "Albert Einstein", date: "March 14", year: 1879, profession: "Physicist" },
+            { name: "Leonardo da Vinci", date: "April 15", year: 1452, profession: "Artist/Inventor" },
+            { name: "Marie Curie", date: "November 7", year: 1867, profession: "Scientist" },
+            { name: "William Shakespeare", date: "April 23", year: 1564, profession: "Writer" },
+            { name: "Isaac Newton", date: "January 4", year: 1643, profession: "Mathematician" },
+            { name: "Mozart", date: "January 27", year: 1756, profession: "Composer" },
+            { name: "Charles Darwin", date: "February 12", year: 1809, profession: "Biologist" },
+            { name: "Vincent van Gogh", date: "March 30", year: 1853, profession: "Artist" },
+            { name: "Galileo Galilei", date: "February 15", year: 1564, profession: "Astronomer" },
+            { name: "Frida Kahlo", date: "July 6", year: 1907, profession: "Artist" },
+            { name: "Stephen Hawking", date: "January 8", year: 1942, profession: "Physicist" },
+            { name: "Pablo Picasso", date: "October 25", year: 1881, profession: "Artist" },
+            { name: "Nelson Mandela", date: "July 18", year: 1918, profession: "Political Leader" },
+            { name: "Martin Luther King Jr.", date: "January 15", year: 1929, profession: "Civil Rights Leader" },
+            { name: "Maya Angelou", date: "April 4", year: 1928, profession: "Writer" }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            detectTimezone();
+            setTodayDate();
+            displayFamousBirthdays();
+        });
+
+        function detectTimezone() {
+            try {
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                document.getElementById('timezone-display').textContent = timezone;
+            } catch (e) {
+                document.getElementById('timezone-display').textContent = 'UTC (Default)';
+            }
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('target-date').value = today;
+        }
+
+        function displayFamousBirthdays() {
+            const today = new Date();
+            const todayMonth = today.getMonth() + 1;
+            const todayDay = today.getDate();
+            
+            const todayBirthdays = famousPeople.filter(person => {
+                const [month, day] = person.date.split(' ');
+                const monthNum = new Date(Date.parse(month + " 1, 2000")).getMonth() + 1;
+                const dayNum = parseInt(day);
+                return monthNum === todayMonth && dayNum === todayDay;
+            });
+
+            const shuffled = [...famousPeople].sort(() => 0.5 - Math.random());
+            const displayPeople = todayBirthdays.length > 0 ? todayBirthdays : shuffled.slice(0, 6);
+
+            const birthdaysList = document.getElementById('famous-birthdays-list');
+            birthdaysList.innerHTML = displayPeople.map(person => {
+                const age = new Date().getFullYear() - person.year;
+                return `
+                    <div class="birthday-card">
+                        <div class="name">${person.name}</div>
+                        <div class="date">${person.date}, ${person.year}</div>
+                        <div class="profession">${person.profession} • Age: ${age}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateAge() {
+            const birthdateInput = document.getElementById('birthdate').value;
+            const targetDateInput = document.getElementById('target-date').value;
+
+            if (!birthdateInput) {
+                alert('Please enter your birth date!');
+                return;
+            }
+
+            birthDate = new Date(birthdateInput);
+            const targetDate = targetDateInput ? new Date(targetDateInput) : new Date();
+
+            if (birthDate > targetDate) {
+                alert('Birth date cannot be in the future!');
+                return;
+            }
+
+            displayAgeResults(birthDate, targetDate);
+            startRealTimeCounter();
+        }
+
+        function displayAgeResults(birth, target) {
+            const results = document.getElementById('results');
+            const ageDisplay = document.getElementById('age-display');
+            
+            results.style.display = 'block';
+            
+            const ageData = calculateDetailedAge(birth, target);
+            
+            let html = '';
+            
+            if (currentDisplayMode === 'traditional' || currentDisplayMode === 'all') {
+                html += `
+                    <div class="age-card">
+                        <h4>📅 Traditional Age</h4>
+                        <div class="value">${ageData.years}</div>
+                        <div class="unit">Years, ${ageData.months} Months, ${ageData.days} Days</div>
+                    </div>
+                `;
+            }
+            
+            if (currentDisplayMode === 'total-days' || currentDisplayMode === 'all') {
+                html += `
+                    <div class="age-card">
+                        <h4>📊 Total Days Lived</h4>
+                        <div class="value">${ageData.totalDays.toLocaleString()}</div>
+                        <div class="unit">Days</div>
+                    </div>
+                `;
+            }
+            
+            if (currentDisplayMode === 'total-hours' || currentDisplayMode === 'all') {
+                html += `
+                    <div class="age-card">
+                        <h4>⏰ Total Hours Lived</h4>
+                        <div class="value">${ageData.totalHours.toLocaleString()}</div>
+                        <div class="unit">Hours</div>
+                    </div>
+                `;
+            }
+            
+            if (currentDisplayMode === 'total-minutes' || currentDisplayMode === 'all') {
+                html += `
+                    <div class="age-card">
+                        <h4>⚡ Total Minutes Lived</h4>
+                        <div class="value">${ageData.totalMinutes.toLocaleString()}</div>
+                        <div class="unit">Minutes</div>
+                    </div>
+                `;
+            }
+            
+            ageDisplay.innerHTML = html;
+        }
+
+        function calculateDetailedAge(birth, target) {
+            const diff = target.getTime() - birth.getTime();
+            
+            // Calculate years, months, days
+            let years = target.getFullYear() - birth.getFullYear();
+            let months = target.getMonth() - birth.getMonth();
+            let days = target.getDate() - birth.getDate();
+            
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const totalHours = Math.floor(diff / (1000 * 60 * 60));
+            const totalMinutes = Math.floor(diff / (1000 * 60));
+            
+            return {
+                years,
+                months,
+                days,
+                totalDays,
+                totalHours,
+                totalMinutes,
+                totalSeconds: Math.floor(diff / 1000)
+            };
+        }
+
+        function startRealTimeCounter() {
+            if (!birthDate) return;
+            
+            const realTimeSection = document.getElementById('real-time-section');
+            const liveCounter = document.getElementById('live-counter');
+            
+            realTimeSection.style.display = 'block';
+            
+            if (realTimeInterval) {
+                clearInterval(realTimeInterval);
+            }
+            
+            function updateLiveCounter() {
+                const now = new Date();
+                const ageData = calculateDetailedAge(birthDate, now);
+                
+                liveCounter.innerHTML = `
+                    ${ageData.years}y ${ageData.months}m ${ageData.days}d<br>
+                    <small style="font-size: 0.8em; opacity: 0.9;">
+                        ${ageData.totalDays.toLocaleString()} days • ${ageData.totalHours.toLocaleString()} hours • ${ageData.totalMinutes.toLocaleString()} minutes
+                    </small>
+                `;
+            }
+            
+            updateLiveCounter();
+            realTimeInterval = setInterval(updateLiveCounter, 1000);
+        }
+
+        function setDisplayMode(mode) {
+            currentDisplayMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+            
+            // Recalculate if we have data
+            if (birthDate) {
+                const targetDate = document.getElementById('target-date').value ? 
+                    new Date(document.getElementById('target-date').value) : new Date();
+                displayAgeResults(birthDate, targetDate);
+            }
+        }
+    </script>
+</body>
+</html>
